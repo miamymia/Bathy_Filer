@@ -1,13 +1,11 @@
 # This script creates missing folder according to our folder structure
-# Usage: python3 Create_dirs.py path
-# Example: python3 Create_dirs.py /Volumes/Bathy/Data/01_EEZ_checked/
+# Usage: python Create_dirs.py path startwith
+# Example: python Create_dirs.py /Volumes/Bathy/Data/01_EEZ_checked/ SO
 
 import os
 import subprocess
 import sys
-
-# Global paths
-path = sys.argv[1]
+import argparse
 
 
 def create_dirs(cruise_name):
@@ -19,11 +17,10 @@ def create_dirs(cruise_name):
     """
 
     # get cruise name & which mbes (e.g. EM122)
-
     product = str(cruise_name.name + '_products')
     fileinfo = str(cruise_name.name + '_fileinfo.txt')
 
-    cruise_dst = os.path.join(path, cruise_name)
+    cruise_dst = os.path.join(args.path, cruise_name)
 
     raw_dst = os.path.join(cruise_dst, 'raw')
     meta_dst = os.path.join(cruise_dst, '_metadata')
@@ -87,5 +84,9 @@ def create_dirs(cruise_name):
 
 
 if __name__ == '__main__':
-    [print(cruise_dir.name) for cruise_dir in os.scandir(path) if cruise_dir.is_dir() and cruise_dir.name.startswith('SO')]
-    [create_dirs(cruise_dir) for cruise_dir in os.scandir(path) if cruise_dir.is_dir() and cruise_dir.name.startswith('SO')]
+    parser = argparse.ArgumentParser(description= 'Create directory structure for bathy data')
+    parser.add_argument("path", metavar="DIRECTORY", help="Enter parent directory that contains cruise folders")
+    parser.add_argument("startswith", metavar="CHARACTER", help="Enter vessel letter (e.g. 'SO' for SONNE) to filter directories")
+    args = parser.parse_args()
+    [print(cruise_dir.name) for cruise_dir in os.scandir(args.path) if cruise_dir.is_dir() and cruise_dir.name.startswith(args.startswith)]
+    [create_dirs(cruise_dir) for cruise_dir in os.scandir(args.path) if cruise_dir.is_dir() and cruise_dir.name.startswith(args.startswith)]
