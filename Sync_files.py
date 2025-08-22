@@ -1,21 +1,16 @@
-# This script synchronises bathy files from MDM to local disk
+# This script synchronises bathy files from MDM (src) to local disk (dst)
 # Usage: python3 Sync_files.py src dst
-# Example: python Sync_files.py SO/EM122/SO294/  SO294/raw/EM122/
+# Example: python Sync_files.py /Volumes/projects/p_mdm/mdm/SO/EM122/SO294/  /Users/hiwi/DataOnDisk/Pangaea/00_from_MDM/SO294/raw/EM122/
 
 import os
 import subprocess
 import sys
+import argparse
 
-# Global paths
-src_path=os.path.abspath("/Volumes/projects/p_mdm/mdm")
-dst_path=os.path.abspath("/Users/hiwi/DataOnDisk/Pangaea/00_from_MDM")
-suffix_src = sys.argv[1]
-suffix_dst = sys.argv[2]
-src = os.path.join(src_path, suffix_src)
-dst = os.path.join(dst_path, suffix_dst)
+
 # print('dst: ', dst)
 
-def create_dirs():
+def create_dirs(src, dst):
 
     """
     Define paths and creates destination dir;
@@ -23,16 +18,22 @@ def create_dirs():
     and a metadata text file: {cruise_name}_fileinfo.txt
     """
 
+    src = args.src
+    dst = args.dst
+    suffix_src = src.split('mdm')[1]
+    print(f"suffix_src: {suffix_src}")
+
+
     # get cruise name & which mbes (e.g. EM122)
-    cruise=suffix_dst.split('/')[0]
-    raw=suffix_dst.split('/')[1]
-    mbes=suffix_dst.split('/')[2]
+    cruise=suffix_src.split('/')[-1]
+    raw='raw'
+    mbes=suffix_src.split('/')[-2]
     print('mbes: ', mbes)
     print('raw: ', raw)
 
 
     # Create Cruise Folder, raw folder inside and EMXXX inside raw
-    cruise_dst = os.path.join(dst_path, cruise)
+    cruise_dst = os.path.join(dst, cruise)
     raw_dst = os.path.join(cruise_dst, raw)
     mbes_dst = os.path.join(raw_dst, mbes)
     print('mbes_dst: ', mbes_dst)
@@ -115,31 +116,32 @@ def create_dirs():
             print(fileinfo_path, ' already exists. Appended Info for ', mbes)
 
 
-if True:
-    def copy_mbes():
-        """
-        runs rsync on source & destination dirs
-        Parameters:
-            - exclude: .wcd data
-            - ignore-existing: skip updating files that already exist on receiver
-            - progress: show copying progress
-            - src: MDM folder
-            - dst: local drive (see create_dirs())
-        """
-        print('copying from ', src, ' to ', dst)
-
-        #find_cmd = [ 'find', src, '-type', 'f' ]
-        #count_cmd = [ 'wc', '-l' ]
-        #sync_cmd = ['time', 'rsync', '-avh', '-r', '--exclude', '*.wcd', '--ignore-existing', '--progress', src, dst ]
-
-        sync_cmd = ['time', 'rsync', '-avh', '-r', '-m', '--include', '*/', '--include', '*.*all', '--exclude', '*.*wcd', '--ignore-existing', '--progress', src, dst ]
-        pv_cmd = ['pv', '-lep', '-s', '2000']
-        sync = subprocess.Popen(sync_cmd, stdout=subprocess.PIPE)
-        subprocess.run(pv_cmd, stdin=sync.stdout, check=True)
+def copy_mbes(src, dst):
+    """
+    runs rsync on source & destination dirs
+    Parameters:
+        - exclude: .wcd data
+        - ignore-existing: skip updating files that already exist on receiver
+        - progress: show copying progress
+        - src: MDM folder
+        - dst: local drive (see create_dirs())
+    """
+    print('copying from ', src, ' to ', dst)
+    #find_cmd = [ 'find', src, '-type', 'f' ]
+    #count_cmd = [ 'wc', '-l' ]
+    #sync_cmd = ['time', 'rsync', '-avh', '-r', '--exclude', '*.wcd', '--ignore-existing', '--progress', src, dst ]
+    sync_cmd = ['time', 'rsync', '-avh', '-r', '-m', '--include', '*/', '--include', '*.*all', '--exclude', '*.*wcd', '--ignore-existing', '--progress', src, dst ]
+    pv_cmd = ['pv', '-lep', '-s', '2000']
+    sync = subprocess.Popen(sync_cmd, stdout=subprocess.PIPE)
+    subprocess.run(pv_cmd, stdin=sync.stdout, check=True)
 
 
 
 if __name__ == '__main__':
-    if os.path.exists(src):
-        create_dirs() 
-        copy_mbes()
+    parser = argparse.ArgumentParser(description="Uses rsync to copy .all files from src to dst")
+    parser.add_argument("src", metavar="DIRECTORY", help="source directory: should be something with projects/p_mdm/mdm")
+    parser.add_argument("dst", metavar="DIRECTORY", help="destination directory (maybe processing folder or something)")
+    args = parser.parse_args()
+    if os.path.exists(args.src):
+        create_dirs(args.src, args.dst) 
+        copy_mbes(args.src, args.dst)
