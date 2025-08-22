@@ -1,2 +1,2 @@
-# Bathy_Filer
+# Bathy Filer
 Script collection to sort and order bathymetry data on local server
