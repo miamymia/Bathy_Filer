@@ -12,4 +12,4 @@ Script collection to sort and order bathymetry data on local server
 - `Workflow_mbsystem_Kongsberg.sh` does processing for Kongsberg data (mbsystem format 56)
 - `Workflow_mbsystem_QnD_DAM.sh` can be used to create 'quick and dirty' grids for overview etc. 
 
-- _docs contains manuals and log file templates for multibeam data acquisition and processing plus a QGIS manual 
+- __docs_ contains manuals and log file templates for multibeam data acquisition and processing plus a QGIS manual 
