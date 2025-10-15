@@ -1,8 +1,8 @@
 TODOs:
 - Define metadata
 - Logic to update geopackages with metadata
+- Add logic to check naming, especially if cruise legs are misspelled, e.g. SO302_1 (WRONG!) instead of SO302-1 (CORRECT!)
+- Add logic to append single files to compilations for both raster and geopackages 
+- Cleanup for better use with single files
 - Publish on Geoserver both grid & gpkg
 - Find SO164 data (only ones missing!)
-- Add logic to check naming, especially if cruise legs are misspelled, e.g. SO302_1 (WRONG!) instead of SO302-1 (CORRECT!)
-- Cleanup for better use with single files
-- Add logic to append single files to compilations for both raster and geopackages 
