@@ -8,7 +8,7 @@ Script collection to sort and order bathymetry data on local server
 - `Sync_files.py` uses rsync to copy multibeam data from MDM by excluding .wcd data. It also creates the folder structure. Usage: _"python Sync_files.py path/to/src_mdm_dir path/to/local/dst_dir"_; E.g.: _python Sync_files.py /Volumes/projects/p_mdm/mdm/SO/EM122/SO294/  /Users/hiwi/DataOnDisk/Pangaea/00_from_MDM/SO294/raw/EM122/_
 - `Tiling.sh` takes xyz data as input and divides it into tiles of user defined size in coordinate units. For HPC usage, use in combination with `Tiling_sbatch.slurm`
 
-- The _mbsystem_ Workflows can be used for older data to create grids, extract backscatter, adjust SVP etc. They are mostly redundant with slight differences:
+- The _mbsystem_ Workflows can be used for older data to create grids, extract backscatter, adjust SVP etc. **Caution: Don't just execute the .sh scripts, rather copy the lines you need out of it!** They are mostly redundant with slight differences:
 - `Workflow_mbsystem_General_SVPAdjust.sh` can be used to manually adjust SVP for certain areas within the data (from line 212)
 - `Workflow_mbsystem_Kongsberg.sh` does processing for Kongsberg data (mbsystem format 56)
 - `Workflow_mbsystem_QnD_DAM.sh` can be used to create 'quick and dirty' grids for overview etc. 
