@@ -1,7 +1,7 @@
 # Merge all bathy grids in file list into one grid compilation
-# file list created with Create_productLists.ipynb
-# Usage: bash Create_GPKG_Compilation platform 
+# Usage: bash 04_Create_Raster_Compilation platform 
 # platform: one of MERIAN, METEOR, SONNE
+# Note: file list needs to contains absolute paths to gpks files! Create lists with 00_Create_productLists.ipynb
 # blueheart must be mounted!
 
 %%bash
