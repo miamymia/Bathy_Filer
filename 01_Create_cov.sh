@@ -1,4 +1,4 @@
-# Usage: ./create_cov.sh ifi
+# Usage: bash 01_Create_cov.sh ifi
 # ifi/ofi: input file name; input: bathymetry grid (geotiff); output: coverage geopackage;
 # Calculates zero grid from bathymetry and polygonises zero grid
 
