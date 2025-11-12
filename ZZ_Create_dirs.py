@@ -88,8 +88,8 @@ def create_dirs(cruise_name):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description= 'Create directory structure for bathy data')
     parser.add_argument("path", metavar="DIRECTORY", help="Enter parent directory that contains cruise folders")
-    parser.add_argument("startswith", metavar="CHARACTER", help="Enter vessel letter (e.g. 'SO' for SONNE) to filter directories")
-    parser.add_argument("notstartswith", metavar="CHARACTER", help="Enter vessel letter which shall be excluded to avoid unwanted behaviour (e.g. 'M' for Meteor in 'startswith' would also include all 'MSM')")
+    parser.add_argument("startswith", type=str, help="Enter vessel letter (e.g. 'SO' for SONNE) to filter directories")
+    parser.add_argument("--notstartswith", type=str, default='--', help="Enter vessel letter which shall be excluded to avoid unwanted behaviour (e.g. 'M' for Meteor in 'startswith' would also include all 'MSM')")
     args = parser.parse_args()
-    [print(cruise_dir.name) for cruise_dir in os.scandir(args.path) if cruise_dir.is_dir() and cruise_dir.name.startswith(args.startswith)]
+    [print(cruise_dir.name) for cruise_dir in os.scandir(args.path) if cruise_dir.is_dir() and cruise_dir.name.startswith(args.startswith) and not cruise_dir.name.startswith(args.notstartswith)]
     [create_dirs(cruise_dir) for cruise_dir in os.scandir(args.path) if cruise_dir.is_dir() and cruise_dir.name.startswith(args.startswith) and not cruise_dir.name.startswith(args.notstartswith)]
