@@ -12,7 +12,7 @@ cd $local
 IFS=$'\n'       
 set -f    
 for zf in $(cat < "$ifi"); do
-  mv "$zf" "$local"
+  cp "$zf" "$local"
 done
 
 ogrmerge -f GPKG -o "${platform}_GEOMAR_TID_EPSG3395.gpkg" *_Coverage.gpkg -src_geom_type MULTIPOLYGON -overwrite_ds
